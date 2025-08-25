@@ -78,10 +78,7 @@ export default function OrdersList() {
                 </th> */}
               </tr>
             </thead>
-            {/* {loading ? <LoadingComponent/>: orders.length <= 0 ? <NoDataFound/>: 
-             
-            } */}
-
+            {loading ? <LoadingComponent/>: orders.length <= 0 ? <NoDataFound/>: 
              <tbody className="divide-y divide-gray-200 bg-white">
                 {orders.map((order) => (
                   <tr key={order.email}>
@@ -115,6 +112,7 @@ export default function OrdersList() {
                   </tr>
                 ))}
               </tbody>
+            }
           </table>
         </div>
       </div>
