@@ -12,6 +12,8 @@ import logo from "./logo3.png";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCategoriesAction } from "../../redux/slices/category.js/categorySlice";
 import { getCartItemsFromLocalStorage } from "../../redux/slices/cart/cartSlice";
+import { logOutUserAction } from "../../redux/slices/users/userSlice";
+import { fetchCouponsAction } from "../../redux/slices/coupon/couponsSlice";
 
 export default function Navbar() {
   // dispatch
@@ -33,9 +35,9 @@ export default function Navbar() {
   let cartItemsFromLocalStorage;
   // get login user from local storage
   const user = JSON.parse(localStorage.getItem("userInfo"));
-  // console.log(user);
+  console.log(user);
   
-  const isLoggedIn = user?.data?.token ? true : false  
+  const isLoggedIn = user?.token ? true : false  
   // console.log("isLoggedIn", isLoggedIn);
   // get data from store
   useEffect(() => {
@@ -46,6 +48,27 @@ export default function Navbar() {
   const {cartItems} = useSelector((state) => state?.carts);
   // console.log(cartItems);
 
+  useEffect(() => {
+    dispatch(fetchCouponsAction())
+  }, [dispatch])
+  //get coupons
+  const { coupons, loading, error } = useSelector((state) => state?.coupons);
+  // console.log(coupons?.coupons);
+  const currentCoupon = coupons.coupons?.[coupons.coupons.length - 1]
+
+  // const currentCoupon =
+  // coupons?.coupons && coupons.coupons.length > 0
+  // ? coupons.coupons[coupons.coupons.length - 1]
+  // : null;
+
+  // console.log(currentCoupon, "curr");
+    
+
+  const logOutHandler = () => {
+    dispatch(logOutUserAction());
+    // reload
+    // window.location.reload();
+  }
 
   
   return (
@@ -164,12 +187,42 @@ export default function Navbar() {
 
       <header className="relative z-10">
         <nav aria-label="Top">
-          {/* Top navigation  desktop*/}
-          <div className="bg-gray-900">
+          {/* coupon navbar  */}
+          {!currentCoupon?.isEpired && 
+          <div className="bg-yellow-500">
             <div className="mx-auto flex h-10 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-              <p className="flex-1 text-center text-sm font-medium text-white lg:flex-none">
-                Get free delivery on orders over $100
+              <p style={{textAlign: "center", width: "100%"}} className="flex-1 text-center text-sm  font-medium text-white lg:flex-none">
+                {/* Get free delivery on orders over $100 */}
+                {currentCoupon ? `${currentCoupon?.code }- ${currentCoupon?.discount}%,
+                ${currentCoupon?.daysLeft}`
+                : "No flash sales at the moment"}
               </p>
+
+              {/* <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
+                {!isLoggedIn && <>
+                  <Link
+                    to="/register"
+                    className="text-sm font-medium text-white hover:text-gray-100">
+                    Create an account
+                  </Link>
+                  <span className="h-6 w-px bg-gray-600" aria-hidden="true" />
+                  <Link
+                    to="/login"
+                    className="text-sm font-medium text-white hover:text-gray-100">
+                    Sign in
+                  </Link>
+                </>}
+              </div> */}
+            </div>
+          </div>}
+          {/* Top navigation  desktop*/}
+         {!isLoggedIn &&  <div className="bg-gray-500">
+            <div className="mx-auto flex h-10 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+              {/* <p style={{textAlign: "center", width: "100%"}} className="flex-1 text-center text-sm  font-medium text-white lg:flex-none">
+                {currentCoupon ? `${currentCoupon?.code }- ${currentCoupon?.discount}%,
+                ${currentCoupon?.daysLeft}`
+                : "No flash sales at the moment"}
+              </p> */}
 
               <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
                 {!isLoggedIn && <>
@@ -187,7 +240,7 @@ export default function Navbar() {
                 </>}
               </div>
             </div>
-          </div>
+          </div>}
 
           {/* Desktop Navigation */}
           <div className="bg-white">
@@ -269,18 +322,52 @@ export default function Navbar() {
 
                   {/* login profile icon mobile */}
                   <div className="flex flex-1 items-center justify-end">
-                    <div className="flex items-center lg:ml-8">
-                      <div className="flex space-x-8">
+                    {user?.userFound?.isAdmin &&                     
+                    <Link 
+                      to='/admin'
+                      className="inline-flex items-center rounded-md border
+                      border-transparent bg-red-500 px-4 py-2 text-sm font-medium text-white
+                      shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-indigo-500
+                      focus:ring-offset-2">
+                      Admin Dashboard
+                    </Link>}
+                    <div className="flex items-center lg:ml-8">            
+                      <div className="flex items-center space-x-4">
                         {isLoggedIn && (
-                          <div className="flex">
+                          <>
+                            {/* Profile Link */}
                             <Link
-                            to="/customer-profile"
-                            className="-m-2 p-2 text-gray-400 hover:text-gray-500">
-                            <UserIcon className="h-6 w-6" aria-hidden="true" />
-                          </Link>
-                        </div>
+                              to="/customer-profile"
+                              className="p-2 text-gray-400 hover:text-gray-500 flex items-center"
+                            >
+                              <UserIcon className="h-6 w-6" aria-hidden="true" />
+                            </Link>
+
+                            {/* Logout Button */}
+                            <button onClick={logOutHandler}
+                             className="p-2 text-gray-500 hover:text-gray-700 flex items-center">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth={1.5}
+                                stroke="currentColor"
+                                className="h-6 w-6 text-gray-700"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 
+                                    2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 
+                                    7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 
+                                    9l-3 3m0 0 3 3m-3-3h12.75"
+                                />
+                              </svg>
+                            </button>
+                          </>
                         )}
                       </div>
+
 
                       <span
                         className="mx-4 h-6 w-px bg-gray-200 lg:mx-6"

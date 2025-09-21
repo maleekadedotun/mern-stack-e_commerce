@@ -6,6 +6,7 @@ import ErrorMsg from "../../ErrorMsg/ErrorMsg";
 import SuccessMsg from "../../SuccessMsg/SuccessMsg";
 import LoadingComponent from "../../LoadingComp/LoadingComponent";
 import NoDataFound from "../../NoDataFound/NoDataFound";
+import { Link } from "react-router-dom";
 
 const people = [
   {
@@ -25,7 +26,7 @@ export default function OrdersList() {
   },[dispatch]);
 
   const {error, loading, orders} = useSelector((state) => state?.orders);
-  console.log(orders);
+  // console.log(orders);
   
   return (
     <>
@@ -50,7 +51,7 @@ export default function OrdersList() {
                 <th
                   scope="col"
                   className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell">
-                  Payment Method
+                  Payment Status
                 </th>
                 <th
                   scope="col"
@@ -78,36 +79,49 @@ export default function OrdersList() {
                 </th> */}
               </tr>
             </thead>
-            {loading ? <LoadingComponent/>: orders.length <= 0 ? <NoDataFound/>: 
+            {loading ? <LoadingComponent/>: !orders || orders.length === 0 ? <NoDataFound/>: 
              <tbody className="divide-y divide-gray-200 bg-white">
                 {orders.map((order) => (
                   <tr key={order.email}>
                     <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-6">
                       {order.orderNumber}
                     </td>
-                    <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
-                        {order.paymentMethod}
+                    <td className="hidden px-3 py-4 text-sm text-gray-700 lg:table-cell">
+                        {order.paymentStatus === "Not paid" ?
+                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-600 text-gray-300">
+                          {  order.paymentStatus}
+                        </span>: order.paymentStatus
+                      }
                     </td>
-                    <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
+                    <td className="hidden px-3 py-4 text-sm text-gray-700 lg:table-cell">
                       {order.createdAt
                       ? new Date(order.createdAt).toLocaleDateString()
                       : "Unknown"}
                     </td>
-                    <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
+                    <td className="hidden px-3 py-4 text-sm text-gray-700 lg:table-cell">
                       {order.deliveredAt
                       ? new Date(order.deliveredAt).toLocaleDateString()
                       : "Unknown"}
                     </td>
-                    <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
+                    <td className="hidden px-3 py-4 text-sm text-gray-700 sm:table-cell">
                       {order.status}
                     </td>
-                    <td className="px-3 py-4 text-sm text-gray-500">
+                    <td className="px-3 py-4 text-sm text-gray-700">
                       {order.totalPrice}
                     </td>
                     <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                      <a href="#" className="text-indigo-600 hover:text-indigo-900">
+                      {order.paymentStatus !== "Not paid" ? (
+                        <Link 
+                        style={{cursor: "not-allowed"}}
+                        className="text-gray-300">
                         Edit
-                      </a>
+                      </Link>
+                      ) :
+                      <Link 
+                        to={`/admin/orders/${order?._id}`} className="text-indigo-600 hover:text-indigo-900">
+                        Edit
+                      </Link>
+                      }
                     </td>
                   </tr>
                 ))}

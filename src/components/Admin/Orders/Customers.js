@@ -1,4 +1,10 @@
+import { useDispatch, useSelector } from "react-redux";
 import OrdersStats from "./OrdersStatistics";
+import { useEffect } from "react";
+import { fetchOrdersAction } from "../../../redux/slices/order/orderSlice";
+import LoadingComponent from "../../LoadingComp/LoadingComponent";
+import ErrorMsg from "../../ErrorMsg/ErrorMsg";
+import NoDataFound from "../../NoDataFound/NoDataFound";
 
 const people = [
   {
@@ -11,87 +17,104 @@ const people = [
 ];
 
 export default function Customers() {
+   // dispatch
+    const dispatch = useDispatch();
+    useEffect(() =>{
+      dispatch(fetchOrdersAction())
+    },[dispatch]);
+  
+    const {error, loading, orders} = useSelector((state) => state?.orders);
+    const customers = orders
+    // console.log(customers, "customers");
+
+    // remove duplicate
+    const uniqueCustomers = customers.filter((item, index) =>{
+      return customers.map((customer) => customer?.id).indexOf(item.id) === index
+    });
+
+    // console.log(uniqueCustomers);
+    
+    
   return (
     <div className="px-4 sm:px-6 lg:px-8">
+     
       <div className="sm:flex sm:items-center"></div>
 
       <h3 className="text-lg font-medium leading-6 text-gray-900 mt-3">
-        Recent Oders
+        All Customers [{uniqueCustomers.length}]
       </h3>
       <div className="-mx-4 mt-3  overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:-mx-6 md:mx-0 md:rounded-lg">
-        <table className="min-w-full divide-y divide-gray-300">
-          <thead className="bg-gray-50">
-            <tr>
-              <th
-                scope="col"
-                className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
-                Order ID
-              </th>
-              <th
-                scope="col"
-                className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell">
-                Payment Method
-              </th>
-              <th
-                scope="col"
-                className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell">
-                Oder Date
-              </th>
-              <th
-                scope="col"
-                className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                Delivery Date
-              </th>
-              <th
-                scope="col"
-                className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                Status
-              </th>
+        {
+          loading ? (<LoadingComponent/>): uniqueCustomers?.length <= 0 ?(<NoDataFound/>): 
+          ( <table className="min-w-full divide-y divide-gray-300">
+            <thead className="bg-gray-50">
+              <tr>
+                <th
+                  scope="col"
+                  className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
+                  Full Name
+                </th>
+                <th
+                  scope="col"
+                  className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell">
+                  Email
+                </th>
+                <th
+                  scope="col"
+                  className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell">
+                  Country
+                </th>
+                <th
+                  scope="col"
+                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                  City
+                </th>
+                <th
+                  scope="col"
+                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                  Phone Number
+                </th>
 
-              <th
-                scope="col"
-                className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                Total
-              </th>
-              {/* <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
-                <span className="sr-only">Edit</span>
-              </th> */}
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200 bg-white">
-            {people.map((person) => (
-              <tr key={person.email}>
-                <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-6">
-                  {person.name}
-                  <dl className="font-normal lg:hidden">
-                    <dt className="sr-only">Title</dt>
-                    <dd className="mt-1 truncate text-gray-700">
-                      {person.title}
-                    </dd>
-                    <dt className="sr-only sm:hidden">Email</dt>
-                    <dd className="mt-1 truncate text-gray-500 sm:hidden">
-                      {person.email}
-                    </dd>
-                  </dl>
-                </td>
-                <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
-                  {person.title}
-                </td>
-                <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                  {person.email}
-                </td>
-                <td className="px-3 py-4 text-sm text-gray-500">
-                  {person.role}
-                </td>
-                <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                  <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                    Edit<span className="sr-only">, {person.name}</span>
-                  </a>
-                </td>
+                <th
+                  scope="col"
+                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                    Postal Code
+                </th>
+                {/* <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                  <span className="sr-only">Edit</span>
+                </th> */}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-gray-200 bg-white">
+              {uniqueCustomers.map((customer) => (
+                <tr key={customer.fullname}>
+                  <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-6">
+                    {customer.user.fullname}
+                  </td>
+                  <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
+                    {customer.user.email}
+                  </td>
+                  <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
+                    {customer.user.shippingAddress.country}
+                  </td><td className="px-3 py-4 text-sm text-gray-500">
+                    {customer.user.city}
+                  </td>
+                  <td className="px-3 py-4 text-sm text-gray-500">
+                    {customer.user.shippingAddress.phoneNumber}
+                  </td>
+                  <td className="px-3 py-4 text-sm text-gray-500">
+                    {customer.user.shippingAddress.postalCode}
+                  </td>
+                  {/* <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                    <a href="#" className="text-indigo-600 hover:text-indigo-900">
+                      Edit<span className="sr-only">, {customer.name}</span>
+                    </a>
+                  </td> */}
+                </tr>
+              ))}
+            </tbody>
+          </ table>)
+        }
       </div>
     </div>
   );

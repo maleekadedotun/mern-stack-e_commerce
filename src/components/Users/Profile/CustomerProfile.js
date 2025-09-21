@@ -16,7 +16,7 @@ export default function CustomerProfile() {
   const {error, loading, profile} = useSelector((state) => state?.users)
   // console.log(error, loading, profile);
   const orders = profile?.user?.orders;
-  console.log(orders);
+  // console.log(orders);
   
   
 

@@ -8,8 +8,8 @@ const initialState = {
     loading: false,
     error: null,
     users: [],
-    user: {},
-    profile: {},
+    user: null,
+    profile: {}, 
     userAuth: {
         loading: false,
         error: null,
@@ -21,25 +21,42 @@ const initialState = {
 
 // login Action
 
-export const loginUserAction = createAsyncThunk("users/login", 
-    async({email, password}, {rejectWithValue, getState, dispatch}) =>{
-        try {
-            // make the http request
-            const res = await axios.post(`${baseURL}/users/login`,{
-                email,
-                password,
-            });
-            // save user to local storage
-            localStorage.setItem("userInfo", JSON.stringify(res))
-            // console.log("Login response:", res.data); 
-            return res.data
-        } catch (error) {
-            console.log(error);
+// export const loginUserAction = createAsyncThunk("users/login", 
+//     async({email, password}, {rejectWithValue, getState, dispatch}) =>{
+//         try {
+//             // make the http request
+//             const res = await axios.post(`${baseURL}/users/login`,{
+//                 email,
+//                 password,
+//             });
+//             // save user to local storage
+//             localStorage.setItem("userInfo", JSON.stringify(res.data))
+//             // console.log("Login response:", res.data); 
+//             return res.data
+//         } catch (error) {
+//             console.log(error);
             
-            return rejectWithValue(error?.response?.data);
-        }
+//             return rejectWithValue(error?.response?.data);
+//         }
+//     }
+// );
+
+export const loginUserAction = createAsyncThunk(
+  "users/login",
+  async ({ email, password }, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.post(`${baseURL}/users/login`, { email, password }, {
+        headers: { "Content-Type": "application/json" },
+      });
+      // Save in localStorage
+      localStorage.setItem("userInfo", JSON.stringify(data));
+      return data; // ✅ must return the whole data object
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
     }
+  }
 );
+
 
 // register Action
 export const registerUserAction = createAsyncThunk("users/register", 
@@ -66,7 +83,9 @@ export const updateUserShippingAddressAction = createAsyncThunk("users/update-sh
     async({firstName, lastName, address, city, postalCode, country, province, phoneNumber}, {rejectWithValue, getState, dispatch}) =>{
         try {
             // token authenticated
-            const token = getState().users?.userAuth?.userInfo?.data?.token;
+            const token = getState()?.users?.userAuth?.userInfo?.token;
+            // console.log("update", token);
+            
             const config = {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -98,14 +117,20 @@ export const getUserProfileAction = createAsyncThunk("users/profile",
     async(payload, {rejectWithValue, getState, dispatch}) =>{
         try {
             // token authenticated
-            const token = getState().users?.userAuth?.userInfo?.data?.token;
+            const token = getState()?.users?.userAuth?.userInfo?.token;
+            // console.log(token, "profile");
+            
             const config = {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             };
+            // console.log(config);
+            
             // make the http request
             const res = await axios.get(`${baseURL}/users/profile`, config);
+            console.log(res.data);
+            
             // save user to local storage
             return res.data
         } catch (error) {
@@ -113,6 +138,14 @@ export const getUserProfileAction = createAsyncThunk("users/profile",
             
             return rejectWithValue(error?.response?.data);
         }
+    }
+);
+
+// logOut user Action
+export const logOutUserAction = createAsyncThunk("users/logOut", 
+    async(payload, {rejectWithValue, getState, dispatch}) =>{
+       localStorage.removeItem("userInfo");
+        return true       
     }
 );
 // create userSlice
@@ -148,13 +181,13 @@ const usersSlice = createSlice({
             state.loading = false;
         });
 
-           // profile
+        // profile
         builder.addCase(getUserProfileAction.pending, (state, action) =>{
             state.loading = true;
         });
   
         builder.addCase(getUserProfileAction.fulfilled, (state, action) =>{
-            state.profile = action.payload;
+            state.profile = action.payload.user; 
             state.loading = false;
         });
         builder.addCase(getUserProfileAction.rejected, (state, action) =>{
@@ -162,13 +195,17 @@ const usersSlice = createSlice({
             state.loading = false;
         });
 
-        // shipping address
+        // logOut
+        builder.addCase(logOutUserAction.fulfilled, (state, action) =>{
+            state.userAuth.userInfo = null;
+        });
 
+        // shipping address
         builder.addCase(updateUserShippingAddressAction.pending, (state, action) =>{
             state.loading = true;
         });
         builder.addCase(updateUserShippingAddressAction.fulfilled, (state, action) =>{
-            state.user = action.payload;
+            state.user = action.payload.user;
             state.loading = false;
         });
         builder.addCase(updateUserShippingAddressAction.rejected, (state, action) =>{

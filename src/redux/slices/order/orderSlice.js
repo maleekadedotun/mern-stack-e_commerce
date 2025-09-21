@@ -30,7 +30,7 @@ export const placeOrderAction = createAsyncThunk(
         totalPrice,
       } = payload;
           // token authenticated
-          const token = getState().users?.userAuth?.userInfo?.data?.token;
+          const token = getState().users?.userAuth?.userInfo?.token;
           const config = {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -58,10 +58,9 @@ export const placeOrderAction = createAsyncThunk(
 export const orderStatsAction = createAsyncThunk(
   "order/statistics", 
   async(payload, {rejectWithValue, getState, dispatch}) => {    
-    try {
-      
+    try {  
       // token authenticated
-      const token = getState().users?.userAuth?.userInfo?.data?.token;
+      const token = getState().users?.userAuth?.userInfo?.token;
       //   console.log("Full state:", getState());
 
         const config = {
@@ -72,7 +71,7 @@ export const orderStatsAction = createAsyncThunk(
         // request
         const { data } = await axios.get(`${baseURL}/orders/sales/stats`,config); 
         return data
-      } catch (error) {
+    } catch (error) {
       return rejectWithValue(error?.response?.data)
     }
   }
@@ -85,7 +84,7 @@ export const fetchOrdersAction = createAsyncThunk(
     try {
       
       // token authenticated
-      const token = getState().users?.userAuth?.userInfo?.data?.token;
+      const token = getState().users?.userAuth?.userInfo?.token;
       //   console.log("Full state:", getState());
 
         const config = {
@@ -95,6 +94,8 @@ export const fetchOrdersAction = createAsyncThunk(
         };
         // request
         const { data } = await axios.get(`${baseURL}/orders`,config); 
+        console.log(data);
+        
         return data
       } catch (error) {
       return rejectWithValue(error?.response?.data)
@@ -110,7 +111,7 @@ export const fetchOrderAction = createAsyncThunk(
     
     try {
       // token authenticated
-      const token = getState().users?.userAuth?.userInfo?.data?.token;
+      const token = getState().users?.userAuth?.userInfo?.token;
           const config = {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -125,6 +126,39 @@ export const fetchOrderAction = createAsyncThunk(
       return rejectWithValue(error?.response?.data)
     }
   }
+);
+// update order
+export const updateOrderAction = createAsyncThunk(
+    "order/update-order", 
+    async(payload, {rejectWithValue, getState, dispatch}) => {
+        //   console.log(payload);
+      
+      try {
+        const { 
+          status,
+          id,
+        } = payload;
+          // token authenticated
+          const token = getState().users?.userAuth?.userInfo?.token;
+          const config = {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              // "Content-Type": "multipart/form-data",
+            },
+          };
+          // request
+        const { data } = await axios.put(
+          `${baseURL}/orders/update/${id}`,
+          {
+            status,
+          }, config
+        ); 
+        // console.log("PRODUCT RESPONSE", data);
+        return data
+      } catch (error) {
+          return rejectWithValue(error?.response?.data)
+      }
+    }
 );
 
 // slice
@@ -150,7 +184,7 @@ const orderSlice = createSlice({
         state.error = action.payload;
       });
 
-       // stats
+      // stats
       builder.addCase(orderStatsAction.pending, (state) =>{
         state.loading = true;
       });
@@ -199,6 +233,24 @@ const orderSlice = createSlice({
       builder.addCase(fetchOrderAction.rejected, (state, action) =>{
         state.loading = false;
         state.order = null;
+        state.error = action.payload;
+      });
+
+       // update orders
+      builder.addCase(updateOrderAction.pending, (state) =>{
+        state.loading = true;
+      });
+
+      builder.addCase(updateOrderAction.fulfilled, (state, action) =>{            
+        state.loading = false;
+        state.order = action.payload;
+        state.isAdded = true;
+      });
+
+      builder.addCase(updateOrderAction.rejected, (state, action) =>{
+        state.loading = false;
+        state.order = null;
+        state.isAdded = false;
         state.error = action.payload;
       });
 

@@ -37,25 +37,25 @@ const ordersLinks = [
     ),
     current: true,
   },
-  {
-    name: "Manage Orders",
-    href: "manage-orders",
-    icon: () => (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={1.5}
-        stroke="currentColor"
-        className="w-6 h-6 m-1">
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-        />
-      </svg>
-    ),
-  },
+  // {
+  //   name: "Manage Orders",
+  //   href: "manage-orders",
+  //   icon: () => (
+  //     <svg
+  //       xmlns="http://www.w3.org/2000/svg"
+  //       fill="none"
+  //       viewBox="0 0 24 24"
+  //       strokeWidth={1.5}
+  //       stroke="currentColor"
+  //       className="w-6 h-6 m-1">
+  //       <path
+  //         strokeLinecap="round"
+  //         strokeLinejoin="round"
+  //         d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+  //       />
+  //     </svg>
+  //   ),
+  // },
   {
     name: "Customers",
     href: "customers",
@@ -128,7 +128,7 @@ const couponsLinks = [
     ),
   },
   {
-    name: "Manage Coupon",
+    name: "Manage Coupons",
     href: "manage-coupon",
     icon: () => (
       <svg
@@ -154,14 +154,14 @@ function classNames(...classes) {
 const CategoryLinks = [
   { name: "Add Category", href: "category-to-add", icon: CogIcon },
   {
-    name: "Manage Category",
+    name: "All Categories",
     href: "manage-category",
     icon: QuestionMarkCircleIcon,
   },
 ];
 
 const colorsLinks = [
-  { name: "Add New Color", href: "add-color", icon: CogIcon },
+  // { name: "Add New Color", href: "add-color", icon: CogIcon },
   {
     name: "All Colors",
     href: "all-colors",
@@ -354,7 +354,7 @@ export default function AdminDashboard() {
         {/* Static sidebar for desktop */}
         <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
           {/* Sidebar component, swap this element with another sidebar if you like */}
-          <div className="flex flex-grow flex-col overflow-y-auto bg-cyan-900 pt-5 pb-4">
+          <div className="flex flex-grow flex-col overflow-y-auto bg-cyan-900 pt-32 pb-4">
             <nav
               className="mt-5 flex flex-1 flex-col divide-y divide-cyan-800 overflow-y-auto"
               aria-label="Sidebar">
@@ -487,18 +487,20 @@ export default function AdminDashboard() {
                     <div className="flex items-center">
                       <img
                         className="hidden h-16 w-16 rounded-full sm:block"
-                        src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.6&w=256&h=256&q=80"
+                        src="https://i.ibb.co/drbSkc2/pics1-removebg-preview.png"
+                        // src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.6&w=256&h=256&q=80"
                         alt=""
                       />
                       <div>
                         <div className="flex items-center">
                           <img
                             className="h-16 w-16 rounded-full sm:hidden"
-                            src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.6&w=256&h=256&q=80"
+                            // src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.6&w=256&h=256&q=80"
+                            src="https://i.ibb.co/drbSkc2/pics1-removebg-preview.png"
                             alt=""
                           />
                           <h1 className="ml-3 text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:leading-9">
-                            Good morning, Emilia Birch
+                            Good morning, Adebayo
                           </h1>
                         </div>
                         <dl className="mt-6 flex flex-col sm:ml-3 sm:mt-1 sm:flex-row sm:flex-wrap">

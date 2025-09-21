@@ -10,12 +10,15 @@ const AddShippingAddress = () => {
   // dispatch
   const dispatch = useDispatch()
   useEffect(() =>{
-    dispatch(getUserProfileAction())
+    dispatch(getUserProfileAction());
   }, [dispatch]);
 
-  const {error, loading, profile} = useSelector((state) => state?.users);
-  const user = profile?.user
-  console.log(user);
+  const { error, loading, profile } = useSelector((state) => state?.users);
+  // console.log(profile?.hasShippingAddress, "hasShippingAddress"); 
+console.log(profile, "user"); // ✅ profile itself is the user
+  // console.log(profile?.hasShippingAddress, "hasShippingAddress");
+  // const user =  profile?.user;
+  // console.log(user, "user");
   
   //user profile
   // const { user } = {};
@@ -28,7 +31,7 @@ const AddShippingAddress = () => {
     country: "",
     region: "",
     postalCode: "",
-    phone: "",
+    phoneNumber: "",
   });
   //onchange
   const onChange = (e) => {
@@ -46,7 +49,7 @@ const AddShippingAddress = () => {
     <>
       {error && <ErrorMsg message={error?.message}/>}
       {/* shipping details */}
-      {user?.hasShippingAddress ? (
+      {profile?.hasShippingAddress ? (
         <div className="mt-6">
           <h3 className="text-lg font-medium text-gray-900">
             Shipping details
@@ -57,22 +60,22 @@ const AddShippingAddress = () => {
           </p>
           <div>
             <p className="mt-1 text-sm text-gray-500">
-              First Name : {user?.shippingAddress?.firstName}
+              First Name : {profile?.shippingAddress?.firstName}
             </p>
             <p className="mt-1 text-sm text-gray-500">
-              Last Name : {user?.shippingAddress?.lastName}
+              Last Name : {profile?.shippingAddress?.lastName}
             </p>
             <p className="mt-1 text-sm text-gray-500">
-              Address : {user?.shippingAddress?.address}
+              Address : {profile?.shippingAddress?.address}
             </p>
             <p className="mt-1 text-sm text-gray-500">
-              City : {user?.shippingAddress?.city}
+              City : {profile?.shippingAddress?.city}
             </p>
             <p className="mt-1 text-sm text-gray-500">
-              Country : {user?.shippingAddress?.country}
+              Country : {profile?.shippingAddress?.country}
             </p>
             <p className="mt-1 text-sm text-gray-500">
-              Phone Number : {user?.shippingAddress?.phoneNumber}
+              Phone Number : {profile?.shippingAddress?.phoneNumber}
             </p>
           </div>
         </div>
@@ -215,13 +218,13 @@ const AddShippingAddress = () => {
             <label
               htmlFor="phone"
               className="block text-sm font-medium text-gray-700">
-              Phone
+              Phone Number
             </label>
             <div className="mt-1">
               <input
                 type="text"
-                name="phone"
-                id="phone"
+                name="phoneNumber"
+                id="phoneNumber"
                 onChange={onChange}
                 value={formData.phone}
                 autoComplete="tel"

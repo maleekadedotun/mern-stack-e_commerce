@@ -15,4 +15,4 @@ const NoDataFound = () => {
 };
 
 export default NoDataFound;
-              // {loading ? (<LoadingComponent/>) : error ? (<ErrorMsg/>) : products?.length <= 0 ? (<NoDataFound/>): (<Products products={products}/>)} 
+// {loading ? (<LoadingComponent/>) : error ? (<ErrorMsg/>) : products?.length <= 0 ? (<NoDataFound/>): (<Products products={products}/>)} 
