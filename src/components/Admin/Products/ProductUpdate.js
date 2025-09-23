@@ -77,7 +77,7 @@ export default function ProductUpdate() {
   });
   // get data from store
   const {product, isUpdated , loading, error} = useSelector((state) => state.products)
-  console.log(product);
+  console.log(product, "product");
   
 
 

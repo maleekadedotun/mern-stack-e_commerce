@@ -35,7 +35,7 @@ export const createProductAction = createAsyncThunk(
       } = payload;
           // make request
           // token authenticated
-          const token = getState().users?.userAuth?.userInfo?.data?.token;
+          const token = getState().users?.userAuth?.userInfo?.token;
           
         //   const formData = new FormData();
             // append stuff...
@@ -105,7 +105,7 @@ export const updateProductAction = createAsyncThunk(
     } = payload;
         // make request
         // token authenticated
-        const token = getState().users?.userAuth?.userInfo?.data?.token;
+        const token = getState().users?.userAuth?.userInfo?.token;
         
       //   const formData = new FormData();
           // append stuff...
@@ -149,7 +149,7 @@ async({url}, {rejectWithValue, getState, dispatch}) => {
       
       // make request
       // token authenticated
-      const token = getState().users?.userAuth?.userInfo?.data?.token;
+      const token = getState().users?.userAuth?.userInfo?.token;
       //   console.log("Full state:", getState());
 
         const config = {
@@ -182,7 +182,7 @@ export const fetchProductAction = createAsyncThunk(
       
       // make request
       // token authenticated
-      const token = getState().users?.userAuth?.userInfo?.data?.token;
+      const token = getState().users?.userAuth?.userInfo?.token;
       //   console.log("Full state:", getState());
       //   console.log("Token in fetchProductsAction:", token);
 
