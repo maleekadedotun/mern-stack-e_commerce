@@ -11,7 +11,7 @@ import ErrorMsg from "../../ErrorMsg/ErrorMsg";
 export default function OrderPayment() {
   // get data from location
   const location = useLocation();
-  const {sumTotalPrice} = location.state;
+  const {sumTotalPrice} = location.state || { sumTotalPrice: 0 };
 
   const calculateTotalDiscountedPrice = () => {};
 
@@ -36,15 +36,17 @@ export default function OrderPayment() {
   }, [dispatch]);
 
   const {error, loading, profile} = useSelector((state) => state?.users);
-  const user = profile?.user
-  // console.log(user?.shippingAddress);
+  const user = profile?.shippingAddress
+  // console.log(profile?.shippingAddress);
   // const {orderLoading, orderErr, } = useSelector((state) => state?.orders);
   const { loading: orderLoading, error: orderErr, order } = useSelector((state) => state.orders);
 
 
   // place order action
   // shipping address
-  const shippingAddress = user?.shippingAddress
+  const shippingAddress = profile?.shippingAddress
+  console.log(shippingAddress, "shipping");
+  
   const placeOrderHandler = () =>{
     dispatch(placeOrderAction({
       shippingAddress,

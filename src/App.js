@@ -117,9 +117,9 @@ const App = () => {
           <Route path="orders/:id" element={<AdminRoute>
             <UpdateOrders />
           </AdminRoute>} />
-          <Route path="order-payment" element={<AuthRoute>
+          {/* <Route path="order-payment" element={<AuthRoute>
             <OrderPayment />
-          </AuthRoute>} />
+          </AuthRoute>} /> */}
           <Route path="customers" element={<AdminRoute>
             <Customers />
           </AdminRoute>} />
@@ -137,9 +137,9 @@ const App = () => {
 
         {/* shopping cart */}
         <Route path="/shopping-cart" element={<ShoppingCart />} />
-        {/* <Route path="/order-payment" element={<AuthRoute>
+        <Route path="/order-payment" element={<AuthRoute>
           <OrderPayment />
-        </AuthRoute>} /> */}
+        </AuthRoute>} />
         {/* users */}
         <Route path="/login" element={
           <AuthRoute>

@@ -15,7 +15,7 @@ const AddShippingAddress = () => {
 
   const { error, loading, profile } = useSelector((state) => state?.users);
   // console.log(profile?.hasShippingAddress, "hasShippingAddress"); 
-console.log(profile, "user"); // ✅ profile itself is the user
+  console.log(profile, "user"); // ✅ profile itself is the user
   // console.log(profile?.hasShippingAddress, "hasShippingAddress");
   // const user =  profile?.user;
   // console.log(user, "user");
