@@ -4,10 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { registerUserAction } from "../../../redux/slices/users/userSlice";
 import LoadingComponent from "../../LoadingComp/LoadingComponent";
 import ErrorMsg from "../../ErrorMsg/ErrorMsg";
+// import { useNavigate } from "react-router-dom";
+
 
 const RegisterForm = () => {
   //dispatch
   const dispatch = useDispatch();
+// const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     fullname: "",
@@ -27,13 +30,14 @@ const RegisterForm = () => {
     dispatch(registerUserAction({email, password, fullname}))    
   };
   //select store data
-  const {user, error, loading} =useSelector((state) => state?.users)
+  const {user, error, loading, success} =useSelector((state) => state?.users)
   // redirect
   useEffect(() => {
-    if (user) {
+    if (success) {
       window.location.href = "/login";
+      // navigate("/login");
     }
-  }, [user])
+  }, [success])
 // if (user) {
 //   window.location.href = "/login";
 // }

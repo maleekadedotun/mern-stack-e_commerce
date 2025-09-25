@@ -9,6 +9,7 @@ const initialState = {
     error: null,
     users: [],
     user: null,
+    success: false, // ✅ add this
     profile: {}, 
     userAuth: {
         loading: false,
@@ -175,6 +176,8 @@ const usersSlice = createSlice({
         builder.addCase(registerUserAction.fulfilled, (state, action) =>{
             state.user = action.payload;
             state.loading = false;
+            state.success = true; // ✅ set success to true
+
         });
         builder.addCase(registerUserAction.rejected, (state, action) =>{
             state.error = action.payload;
@@ -193,6 +196,7 @@ const usersSlice = createSlice({
         builder.addCase(getUserProfileAction.rejected, (state, action) =>{
             state.error = action.payload;
             state.loading = false;
+            state.success = false; // ✅ explicitly false
         });
 
         // logOut
