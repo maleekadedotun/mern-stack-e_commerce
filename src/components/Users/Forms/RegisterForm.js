@@ -60,7 +60,7 @@ const RegisterForm = () => {
                 {/* errr */}
                {error && <ErrorMsg message={error?.message}/>}
                
-                <p className="mb-10">Please, do not hesitate</p>
+                <p className="mb-10">Please, do not hesitate..</p>
                 <form onSubmit={onSubmitHandler}>
                   <input
                     name="fullname"
