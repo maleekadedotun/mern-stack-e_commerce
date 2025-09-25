@@ -6,10 +6,11 @@ import LoadingComponent from "../../LoadingComp/LoadingComponent";
 
 const Login = () => {
   const dispatch = useDispatch()
-  const [formData, setFormData] = useState({
-    email: "admin@gmail.com",
-    password: "12345",
-  });
+   const [formData, setFormData] = useState("")
+  // const [formData, setFormData] = useState({
+  //   email: "admin@gmail.com",
+  //   password: "12345",
+  // });
   //---Destructuring---
   const { email, password } = formData;
   
