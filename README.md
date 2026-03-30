@@ -51,11 +51,6 @@ A full-featured e-commerce web application built with the MERN stack. This platf
 
 ---
 
-## 📸 Screenshots
-_Add screenshots of homepage, product page, cart, checkout, and admin dashboard_
-
----
-
 ## 🔗 Live Demo
 https://mern-stack-e-commerce-aeqa.onrender.com
 
