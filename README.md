@@ -81,5 +81,5 @@ CLOUDINARY_API_SECRET=your_api_secret
 
 ### Clone the repository
 ```bash
-git clone https://github.com/your-username/ecommerce-project
+git clone https://github.com/maleekadedotun/mern-stack-e_commerce.git
 cd ecommerce-project
