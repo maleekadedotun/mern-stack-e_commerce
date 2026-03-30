@@ -62,12 +62,12 @@ https://mern-stack-e-commerce-aeqa.onrender.com
 ---
 
 ## 📂 GitHub Repository
-https://github.com/your-username/ecommerce-project
+https://github.com/maleekadedotun/mern-stack-e_commerce.git
 
 ---
 
 ## ⚙️ Installation
-cd frontend
+cd mern-stack-e_commerce
 npm install
 npm start
 
